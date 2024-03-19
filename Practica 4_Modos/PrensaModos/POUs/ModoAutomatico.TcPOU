@@ -86,7 +86,7 @@ CASE EstadoPrensa OF
 			EstadoPrensa:=EstadosPrensa.Liberando;
 		END_IF
 	EstadosPrensa.Liberando:
-		IF controlejes.MC_MoveAbsolute_eje1.Done THEN
+		IF controlejes.MC_MoveAbsolute_eje2.Done THEN
 			EstadoPrensa:=EstadosPrensa.Sacando;
 		END_IF
 	EstadosPrensa.Sacando:
