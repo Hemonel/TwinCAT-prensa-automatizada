@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="XestionModos" Id="{5e7d729a-baa2-4ded-9381-4fb393ca88e6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM XestionModos
+VAR
+	fMarcha:r_trig;
+	fReset:r_trig;
+	
+	tResetErros:ton;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fMarcha(clk:=IO.marcha);
+fReset(clk:=IO.ResetErrores);
+power1:=TRUE;
+power2:=TRUE;
+stop1:=FALSE;
+stop2:=FALSE;
+
+CASE VariablesGlobales.ModoMaquina OF
+	modos.Auto:
+		IF IO.ManualAuto THEN
+			stop1:=TRUE;
+			stop2:=TRUE;
+			VariablesGlobales.ModoMaquina:=modos.Manual;
+		END_IF
+		IF IO.Paro THEN
+			VariablesGlobales.ModoMaquina:=modos.parando;
+		END_IF
+		IF VariablesGlobales.EnErro THEN
+			VariablesGlobales.ModoMaquina:=modos.StopSec;
+		END_IF
+	modos.Manual:
+		IF NOT IO.ManualAuto THEN
+			VariablesGlobales.ModoMaquina:=modos.stop;
+		END_IF
+		IF VariablesGlobales.EnErro THEN
+			VariablesGlobales.ModoMaquina:=modos.StopSec;
+		END_IF
+	
+	modos.Stop:
+		IF IO.ManualAuto THEN
+			VariablesGlobales.ModoMaquina:=modos.Manual;
+		END_IF
+		IF fMarcha.q THEN
+			VariablesGlobales.ModoMaquina:=modos.Auto;
+		END_IF
+		IF VariablesGlobales.EnErro THEN
+			VariablesGlobales.ModoMaquina:=modos.StopSec;
+		END_IF
+	
+	modos.StopSec:
+		power1:=FALSE; //no tiene energía en el stopsec
+		power2:=FALSE;
+		IF fReset.q THEN
+			VariablesGlobales.ModoMaquina:=modos.Reseteando;
+			tResetErros(in:=FALSE);
+		END_IF
+		
+	//Temos un novo modo para o reseteo, no que damos medio segundo para que, no caso de haber algunha alarma, esta salte
+	modos.Reseteando:
+		tResetErros(in:=TRUE, pt:=T#1S);
+		IF tResetErros.Q AND NOT EnErro THEN
+			VariablesGlobales.ModoMaquina:=modos.Stop;
+		END_IF
+		//Se o final do temporizador seguimos tendo un erro imos a modo stop seguro
+		IF tResetErros.Q AND VariablesGlobales.EnErro THEN
+			VariablesGlobales.ModoMaquina:=modos.StopSec;
+		END_IF
+	modos.Parando:
+		stop1:=TRUE;
+		stop2:=TRUE;
+		IF paroAlcanzado THEN
+			VariablesGlobales.ModoMaquina:=modos.Stop;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="XestionModos">
+      <LineId Id="6" Count="1" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="90" Count="1" />
+      <LineId Id="8" Count="2" />
+      <LineId Id="98" Count="1" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="15" Count="8" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="25" Count="14" />
+      <LineId Id="81" Count="1" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="100" Count="1" />
+      <LineId Id="69" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

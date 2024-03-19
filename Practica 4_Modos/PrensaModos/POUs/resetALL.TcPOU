@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="resetALL" Id="{27617e08-9477-4ecd-8bc2-923926099a13}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM resetALL
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IO.ElectroEntrar:=FALSE;
+IO.ElectroPechar:=FALSE;
+IO.ElectroPrensar:=FALSE;
+IO.ElectroLiberar:=FALSE;
+IO.ElectroAbrir:=FALSE;
+IO.ElectroSair:=FALSE;]]></ST>
+    </Implementation>
+    <LineIds Name="resetALL">
+      <LineId Id="6" Count="4" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

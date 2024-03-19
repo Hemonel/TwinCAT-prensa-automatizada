@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <GVL Name="VariablesGlobales" Id="{bd53fe5a-d87d-48ea-b085-2d55faf064ca}">
+    <Declaration><![CDATA[
+VAR_GLOBAL
+	ModoMaquina:Modos := modos.StopSec;
+	EnErro:BOOL := FALSE;
+	Simular:BOOL := TRUE;
+	eje1:AXIS_REF; //cinta
+	eje2:AXIS_REF; //prensa
+	paroAlcanzado: BOOL;
+	noFallo: BOOL;
+	ErrorEjes: BOOL;
+	power1:BOOL:=FALSE;
+	power2:BOOL:=FALSE;
+	stop1:BOOL:=FALSE;
+	stop2:BOOL:=FALSE;
+	reset1:BOOL:=FALSE;
+	reset2:BOOL:=FALSE;
+	mover1:BOOL:=FALSE;
+	mover2:BOOL:=FALSE;
+	posicion1:UINT:=0;
+	posicion2:UINT:=0;
+	
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

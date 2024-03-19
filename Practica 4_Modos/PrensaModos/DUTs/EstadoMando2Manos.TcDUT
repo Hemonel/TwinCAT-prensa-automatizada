@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="EstadoMando2Manos" Id="{042dc3a6-def2-4f3c-9741-92306ca196a5}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE estadoMando2Manos:
+	(
+		Esperando:=0,
+		Pulsado1,
+		Pulsado2,
+		Validado,
+		Error
+	);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

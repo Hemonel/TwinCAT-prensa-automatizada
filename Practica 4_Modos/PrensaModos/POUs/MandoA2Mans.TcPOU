@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MandoA2Mans" Id="{5c1e2dd2-2166-4fda-851a-7ef3cddc89b1}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MandoA2Mans
+VAR_INPUT
+	LimiteSoster:BOOL;
+END_VAR
+VAR
+	flancoP1:r_trig;
+	flancoP2:r_trig;
+	temp:ton;
+	estadoActual:estadoMando2Manos;
+END_VAR
+VAR_OUTPUT
+	Q:BOOL:=FALSE;
+	Error:bool:=false;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Valores por defecto
+q:=FALSE;
+Error:=FALSE;
+//Control de flancos
+flancoP1(clk:=IO.Pulsador1 AND ModoAutomatico.EstadoPrensa=EstadosPrensa.Parada);
+flancoP2(clk:=IO.Pulsador2 AND ModoAutomatico.EstadoPrensa=EstadosPrensa.Parada);
+//Temporizador para detectar a pulsación "simulatanea" dos dous pulsadores
+temp(in:=estadoActual=estadoMando2Manos.Pulsado1 OR estadoActual=estadoMando2Manos.Pulsado2, pt:=T#250MS);
+
+CASE estadoActual OF
+	estadoMando2Manos.Esperando:
+		IF flancoP1.Q THEN
+			estadoActual:=estadoMando2Manos.Pulsado1;
+		END_IF
+		IF flancoP2.Q THEN
+			estadoActual:=estadoMando2Manos.Pulsado2;
+		END_IF
+		IF flancoP1.Q AND flancoP2.Q THEN
+			estadoActual:=estadoMando2Manos.Validado;
+		END_IF
+	estadoMando2Manos.Pulsado1:
+		IF temp.Q OR NOT IO.Pulsador1 THEN
+			estadoActual:=estadoMando2Manos.Esperando;
+		END_IF
+		IF flancoP2.Q THEN
+			estadoActual:=estadoMando2Manos.Validado;
+		END_IF
+	estadoMando2Manos.Pulsado2:
+		IF temp.Q OR NOT IO.Pulsador2 THEN
+			estadoActual:=estadoMando2Manos.Esperando;
+		END_IF
+		IF flancoP1.Q THEN
+			estadoActual:=estadoMando2Manos.Validado;
+		END_IF
+	estadoMando2Manos.Validado:
+		q:=TRUE;
+		//Se se cumplen as condicións de límite de mantemento imos a inicio
+		IF LimiteSoster THEN
+			estadoActual:=estadoMando2Manos.Esperando;
+		END_IF
+		//Se soltamos algún pulsador imos a erro
+		IF NOT io.Pulsador1 OR NOT io.Pulsador2 THEN
+			estadoActual:=estadoMando2Manos.Error;
+		END_IF
+	estadoMando2Manos.Error:
+		//Erro estará a TRUE durante un ciclo
+		Error:=TRUE;
+		estadoActual:=estadoMando2Manos.Esperando;
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="MandoA2Mans">
+      <LineId Id="67" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="9" Count="27" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="59" Count="3" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

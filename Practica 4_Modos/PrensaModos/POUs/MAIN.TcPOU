@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="MAIN" Id="{73412b68-e04a-4daa-85d8-3dacf260287a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//resetALL();
+XestionModos();						//Chamada a Xestión de Modos
+MandoA2Mans(LimiteSoster:=NOT modoAutomatico.goHome);	//Chamada o Mando a 2 mans
+gesAlarmas();
+IF mandoa2mans.Error THEN
+	modoautomatico.goHome:=TRUE;
+END_IF
+//Se estamos en modo automático chamamos o programa
+IF VariablesGlobales.ModoMaquina=modos.Auto THEN
+	ModoAutomatico(bOrdenMarcha:=MandoA2Mans.Q,
+	bSimular:=VariablesGlobales.Simular,
+	ordenhome := io.pulsador1);	
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="49" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="53" Count="2" />
+      <LineId Id="43" Count="2" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="60" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

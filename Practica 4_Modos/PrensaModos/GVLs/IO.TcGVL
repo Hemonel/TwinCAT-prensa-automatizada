@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <GVL Name="IO" Id="{a76fa01a-2ce1-4ab0-862d-e10400abc458}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	//Entradas modos
+	Marcha AT %I*:BOOL;
+	Paro AT %I*:BOOL;
+	ManualAuto AT %I*:BOOL;
+	SafetyOK AT %I*: BOOL;
+	ResetErrores AT %I*:BOOL;
+	
+	//Entradas Modo Manual
+	PulsadorEntrar AT %I*:BOOL;
+	PulsadorSair AT %I*:BOOL;
+	PulsadorPechar AT %I*:BOOL;
+	PulsadorAbrir AT %I*:BOOL;
+	PulsadorPrensar AT %I*:BOOL;
+	PulsadorLiberar AT %I*:BOOL;
+	
+	//Entradas físicas mando a 2 mans
+	Pulsador1 AT %I*: BOOL;
+	Pulsador2 AT %I*: BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

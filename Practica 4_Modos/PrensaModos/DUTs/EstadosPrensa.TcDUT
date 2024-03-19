@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="EstadosPrensa" Id="{dfd9ffef-33db-4a41-936c-6d505dfcba81}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE EstadosPrensa :
+(
+	Parada:=0,
+	Entrando,
+	Pechando,
+	Prensando,
+	Aguantando,
+	Liberando,
+	Abrindo,
+	Sacando
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

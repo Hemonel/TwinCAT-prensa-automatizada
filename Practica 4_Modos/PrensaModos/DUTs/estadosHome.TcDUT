@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="estadosHome" Id="{c0aef8fc-121a-4e9d-9c12-1a11fbb2e05e}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE estadosHome :
+(
+	subiendo:=0,
+	abriendo,
+	sacando,
+	ok,
+	espera
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

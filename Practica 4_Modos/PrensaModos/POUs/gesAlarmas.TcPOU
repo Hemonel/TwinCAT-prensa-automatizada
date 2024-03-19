@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="gesAlarmas" Id="{197760f4-3c71-4d0b-adc6-89bfdb36f692}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM gesAlarmas
+VAR
+	TempTimeOUT:ton;
+	EstAnt:EstadosPrensa;
+	
+	PrimeiroErro:INT;
+	Erros:ARRAY[1..9] OF BOOL;
+	contador:INT;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF Variablesglobales.ModoMaquina=modos.Reseteando THEN
+	primeiroerro:=0;
+	FOR contador:=1 TO 9 DO
+		erros[contador]:=FALSE;
+	END_FOR
+END_IF
+
+temptimeout(in:=estant=modoautomatico.EstadoPrensa AND 
+	variablesglobales.ModoMaquina = modos.Auto AND 
+	modoautomatico.estadoprensa <> estadosprensa.Parada, pt:=T#15S); //la vaina esta <> es un distinto
+IF tempTimeout.q THEN 
+	erros[1]:=TRUE;
+	IF primeiroErro=0 THEN
+		primeiroErro:=1;
+	END_IF
+END_IF
+
+//error ejes
+IF ErrorEjes THEN
+	erros[2]:=TRUE;
+	IF primeiroerro=0 THEN
+		primeiroerro:=2;
+	END_IF
+END_IF
+
+//seta emergency
+IF NOT io.SafetyOK THEN
+	erros[3]:=TRUE;
+	IF primeiroerro=0 THEN
+		primeiroerro:=3;
+	END_IF	
+END_IF
+
+//mando dos manos
+IF mandoa2mans.Error THEN
+	erros[4]:=TRUE;
+	IF primeiroerro=0 THEN
+		primeiroerro:=4;
+	END_IF	
+END_IF
+
+VariablesGlobales.EnErro := PrimeiroErro<>0;
+estant:=modoautomatico.EstadoPrensa;]]></ST>
+    </Implementation>
+    <LineIds Name="gesAlarmas">
+      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="15" Count="2" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="25" Count="3" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="120" Count="2" />
+      <LineId Id="118" Count="1" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="92" Count="4" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="99" Count="4" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="107" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
