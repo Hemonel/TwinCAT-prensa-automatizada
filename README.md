@@ -15,6 +15,8 @@ El sistema tiene 4 modos:
 -	Reseteando
 -	Parando
 
+![modos](https://github.com/Hemonel/TwinCAT-prensa-automatizada/assets/153218898/c78759eb-a31c-47c3-9868-d381096174d1)
+
 ### 2.1 Stop
 En este modo espera a que se le de a marcha para entrar a modo automático o que se seleccione modo manual.
 
